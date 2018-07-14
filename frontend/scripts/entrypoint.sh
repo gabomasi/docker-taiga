@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 
 [ "${GITLAB_CLIENT_ID}" = "" ] || \
-  GITLAB_PLUGIN="/plugins/gitlab-auth/gitlab-auth.json"
+  GITLAB_PLUGIN="\"/plugins/gitlab-auth/gitlab-auth.json\""
 
 if [ ! -f /taiga_frontend/conf.json ]; then
     echo "Generating /taiga_frontend/conf.json file..."
