@@ -83,7 +83,7 @@ services:
     #  - GITLAB_URL=https://gitlab.com
     #  - GITLAB_CLIENT_ID=CHANGE_ME
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       # It would be better to add 'postgres' to 'depends_on' on 'backend' service
       # but 'celeryworker' extends 'backend' and we cannot extend a service
