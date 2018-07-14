@@ -19,6 +19,7 @@ RUN tar -xzf ${TAIGA_VERSION}.tar.gz -C ./ taiga-back-${TAIGA_VERSION} --strip-c
 RUN rm ${TAIGA_VERSION}.tar.gz
 
 # Don't want pip to use git, so I'm replacing with pypi.  
+# Don't want pip to use git, so I'm replacing with pypi.
 RUN sed -i 's,git+https://github.com/Xof/django-pglocks.git,django-pglocks==1.0.2,g' requirements.txt
 
 # local.py and checkdb.py and celery
@@ -50,6 +51,7 @@ RUN apk add --no-cache \
     gettext
 
 RUN pip install --no-cache-dir --no-index --find-links=taiga_python_dependencies -r requirements.txt \
+    && pip install taiga-contrib-gitlab-auth-official \
     && rm -R ./taiga_python_dependencies \
     && python manage.py compilemessages
 

@@ -3,6 +3,9 @@
 set -o errexit
 set -o pipefail
 
+[ "${GITLAB_CLIENT_ID}" = "" ] || \
+  GITLAB_PLUGIN="/plugins/gitlab-auth/gitlab-auth.json"
+
 if [ ! -f /taiga_frontend/conf.json ]; then
     echo "Generating /taiga_frontend/conf.json file..."
     TAIGA_API_URL=${TAIGA_API_URL:-\"/api/v1/\"}
@@ -24,7 +27,11 @@ if [ ! -f /taiga_frontend/conf.json ]; then
     "privacyPolicyUrl": null,
     "termsOfServiceUrl": null,
     "maxUploadFileSize": null,
-    "contribPlugins": []
+    "contribPlugins": [
+      $GITLAB_PLUGIN
+    ],
+    "gitLabClientId": "$GITLAB_CLIENT_ID",
+    "gitLabUrl": "$GITLAB_URL"
 }
 EOF
 fi

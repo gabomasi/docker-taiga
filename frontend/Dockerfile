@@ -15,7 +15,12 @@ RUN tar -xzf ${TAIGA_VERSION}.tar.gz -C ./ taiga-front-dist-${TAIGA_VERSION}/dis
     && rm ${TAIGA_VERSION}.tar.gz \
     && chown -R nginx /taiga_frontend \
     && chown -R nginx /scripts/ \
-    && chmod +x /scripts/entrypoint.sh
+    && chmod +x /scripts/entrypoint.sh \
+    && wget https://github.com/taigaio/taiga-contrib-gitlab-auth/archive/3.1.1.tar.gz \
+    && tar -xzvf 3.1.1.tar.gz \
+    && mkdir plugins \
+    && mv taiga-contrib-gitlab-auth-3.1.1/front/dist plugins/gitlab-auth \
+    && rm -R taiga-contrib-gitlab-auth-3.1.1 3.1.1.tar.gz
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

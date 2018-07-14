@@ -73,3 +73,10 @@ if env('USE_ANYMAIL', cast=bool, default=False):
 #         "LOCATION": "unique-snowflake"
 #     }
 # }
+
+# Gitlab plugin
+if env("GITLAB_CLIENT_ID", default=None):
+    INSTALLED_APPS += ["taiga_contrib_gitlab_auth"]
+    GITLAB_API_CLIENT_ID =  env("GITLAB_CLIENT_ID")
+    GITLAB_API_CLIENT_SECRET = env("GITLAB_SECRET")
+    GITLAB_URL = env("GITLAB_URL")

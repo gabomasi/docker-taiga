@@ -15,6 +15,7 @@ Goodies
 * Alpine Linux images
 * Gevent worker for gunicorn
 * django-anymail integration
+* Gitlab integration
 
 I've tried to containerize every module, so we have:
 
@@ -66,9 +67,11 @@ Tips, Tricks and Notes
 Credits
 -------
 
-https://taigaio.github.io/taiga-doc/dist/setup-production.html
+* https://taigaio.github.io/taiga-doc/dist/setup-production.html
+* https://github.com/taigaio/taiga-contrib-gitlab-auth
 
 Inspired by:
 
 * https://github.com/benhutchins/docker-taiga
 * https://github.com/ipedrazas/taiga-docker
+*
