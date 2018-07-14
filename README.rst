@@ -74,4 +74,3 @@ Inspired by:
 
 * https://github.com/benhutchins/docker-taiga
 * https://github.com/ipedrazas/taiga-docker
-*
