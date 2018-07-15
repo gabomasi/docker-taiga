@@ -3,7 +3,7 @@
 set -o errexit
 set -o pipefail
 
-[ "${GITLAB_CLIENT_ID}" = "" ] || \
+[ "x${USE_GITLAB}" = "xtrue" ] && \
   GITLAB_PLUGIN="\"/plugins/gitlab-auth/gitlab-auth.json\""
 
 if [ ! -f /taiga_frontend/conf.json ]; then
@@ -13,13 +13,13 @@ if [ ! -f /taiga_frontend/conf.json ]; then
     TAIGA_EVENTS_URL=${TAIGA_EVENTS_URL:-null}
     cat > /taiga_frontend/conf.json <<EOF
 {
-    "api": $TAIGA_API_URL,
-    "eventsUrl": $TAIGA_EVENTS_URL,
+    "api": "$TAIGA_API_URL",
+    "eventsUrl": "$TAIGA_EVENTS_URL",
     "eventsMaxMissedHeartbeats": 5,
     "eventsHeartbeatIntervalTime": 60000,
     "debug": ${TAIGA_DEBUG:-false},
     "debugInfo": ${TAIGA_DEBUG:-false},
-    "defaultLanguage": $DEFAULT_LANGUAGE,
+    "defaultLanguage": "$DEFAULT_LANGUAGE",
     "themes": ["taiga"],
     "defaultTheme": "taiga",
     "publicRegisterEnabled": ${TAIGA_PUBLIC_REGISTER_ENABLED:-true},

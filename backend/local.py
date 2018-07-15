@@ -3,12 +3,10 @@
 from .common import *
 import environ
 
-
 env = environ.Env()
-DEBUG = env('DJANGO_DEBUG', cast=bool, default=False)
-PUBLIC_REGISTER_ENABLED = env(
-    'TAIGA_PUBLIC_REGISTER_ENABLED', cast=bool, default=True
-)
+DEBUG = env("DJANGO_DEBUG", default=False, cast=bool)
+PUBLIC_REGISTER_ENABLED = env("TAIGA_PUBLIC_REGISTER_ENABLED", default=False, cast=bool)
+
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', cast=list, default=['*'])
@@ -26,7 +24,12 @@ DATABASES = {
 
 TAIGA_HOSTNAME = env('TAIGA_HOSTNAME', default='localhost')
 
-_HTTP = 'https' if env('TAIGA_SSL', cast=bool, default=False) else 'http'
+
+if env("TAIGA_SSL", default=False, cast=bool):
+    _HTTP = 'https'
+else:
+    _HTTP = 'http'
+
 
 SITES = {
     "api": {
@@ -58,7 +61,7 @@ EVENTS_PUSH_BACKEND_OPTIONS = {"url": "amqp://taiga:taiga@rabbitmq:5672/taiga"}
 CELERY_ENABLED = True
 
 # Mail settings
-if env('USE_ANYMAIL', cast=bool, default=False):
+if env("USE_ANYMAIL", default=False, cast=bool):
     INSTALLED_APPS += ['anymail']
     ANYMAIL = {
         "MAILGUN_API_KEY": env('ANYMAIL_MAILGUN_API_KEY'),
@@ -75,7 +78,7 @@ if env('USE_ANYMAIL', cast=bool, default=False):
 # }
 
 # Gitlab plugin
-if env("GITLAB_CLIENT_ID", default=None):
+if env("USE_GITLAB", default=False, cast=bool):
     INSTALLED_APPS += ["taiga_contrib_gitlab_auth"]
     GITLAB_API_CLIENT_ID =  env("GITLAB_CLIENT_ID")
     GITLAB_API_CLIENT_SECRET = env("GITLAB_SECRET")

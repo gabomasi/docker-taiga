@@ -32,31 +32,28 @@ services:
       # - RABBITMQ_HIPE_COMPILE=1
 
   backend:
-    # build: backend/
-    image: dougg/taiga-backend
+    build: backend/
+    # image: dougg/taiga-backend
     volumes:
       - taiga_backend_media:/taiga_backend/media
       - /taiga_backend/static-root
     environment:
-      - DJANGO_DEBUG=True
+      - DJANGO_DEBUG=true
       - DJANGO_SECRET_KEY=DJANGO_SECRET_KEY
       - DJANGO_DB_USER=taiga
       - DJANGO_DB_NAME=taiga
       - DJANGO_DB_PASSWORD=123
 
+      - USE_GITLAB=${USE_GITLAB}
       - GITLAB_URL=${GITLAB_URL}
       - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
       - GITLAB_SECRET=${GITLAB_SECRET}
 
       - DJANGO_ALLOWED_HOSTS=${HOSTNAME}
-      - TAIGA_PUBLIC_REGISTER_ENABLED=false
-      - TAIGA_SSL=False
-      #- TAIGA_HOSTNAME=${HOSTNAME}
-      #- TAIGA_SKIP_DB_CHECK=True
-      #- TAIGA_DB_CHECK_LIMIT_RETRIES='5'
-      #- TAIGA_DB_CHECK_SLEEP_INTERVAL='5.5'
+      - TAIGA_PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED}
+      - TAIGA_SSL=false
 
-      - USE_ANYMAIL=False
+      - USE_ANYMAIL=false
       - ANYMAIL_MAILGUN_API_KEY=MAILGUN-KEY
       - DJANGO_DEFAULT_FROM_EMAIL=example@example.com
 
@@ -74,16 +71,17 @@ services:
       - rabbitmq
 
   frontend:
-    #build: frontend
-    image: dougg/taiga-frontend
+    build: frontend
+    #image: dougg/taiga-frontend
     volumes_from:
       - backend:ro
     environment:
        - TAIGA_DEBUG=true
-       - TAIGA_API_URL="${WEB_PROTOCOL}://${HOSTNAME}/api/v1/"
-       - TAIGA_EVENTS_URL="${WEBSOCKET_PROTOCOL}://${HOSTNAME}/events"
-       - TAIGA_PUBLIC_REGISTER_ENABLED=false
-       - DEFAULT_LANGUAGE="en"
+       - TAIGA_API_URL=${WEB_PROTOCOL}://${HOSTNAME}/api/v1/
+       - TAIGA_EVENTS_URL=${WEBSOCKET_PROTOCOL}://${HOSTNAME}/events
+       - TAIGA_PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED}
+       - DEFAULT_LANGUAGE=en
+       - USE_GITLAB=${USE_GITLAB}
        - GITLAB_URL=${GITLAB_URL}
        - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
     ports:
