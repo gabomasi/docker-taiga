@@ -1,8 +1,6 @@
 FROM node:8.9-alpine
 
-LABEL maintainer="douglasmirandasilva@gmail.com"
 LABEL taiga_version="branch:master"
-
 ENV TAIGA_VERSION master
 
 WORKDIR /taiga_events

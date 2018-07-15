@@ -32,79 +32,71 @@ services:
       # - RABBITMQ_HIPE_COMPILE=1
 
   backend:
-    build: backend/
-    env_file: [ .env ]
+    # build: backend/
+    image: dougg/taiga-backend
     volumes:
       - taiga_backend_media:/taiga_backend/media
       - /taiga_backend/static-root
-    # environment:
-      #- DJANGO_DEBUG=True
-      #- DJANGO_SECRET_KEY=DJANGO_SECRET_KEY
-      #- DJANGO_DB_* must have the same values as <postgresql> service
-      #- DJANGO_DB_USER=taiga
-      #- DJANGO_DB_NAME=taiga
-      #- DJANGO_DB_PASSWORD=123
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_SECRET_KEY=DJANGO_SECRET_KEY
+      - DJANGO_DB_USER=taiga
+      - DJANGO_DB_NAME=taiga
+      - DJANGO_DB_PASSWORD=123
 
-      #- GITLAB_URL=https://gitlab.com
-      #- GITLAB_CLIENT_ID=CHANGE_ME
-      #- GITLAB_SECRET=CHANGE_ME
+      - GITLAB_URL=https://gitlab.com
+      - GITLAB_CLIENT_ID=CHANGE_ME
+      - GITLAB_SECRET=CHANGE_ME
 
-      # - DJANGO_ALLOWED_HOSTS=example.com,example2.com
-      # Must be in lowercase, because we are using in a json file <frontend> (conf.json)
-      # - TAIGA_PUBLIC_REGISTER_ENABLED=false
-      # - TAIGA_SSL=True
-      # - TAIGA_HOSTNAME=example.com
-      # - TAIGA_SKIP_DB_CHECK=True
-      # checkdb.py
-      # - TAIGA_DB_CHECK_LIMIT_RETRIES='5'
-      # - TAIGA_DB_CHECK_SLEEP_INTERVAL='5.5'
-      # ANYMAIL
-      # - USE_ANYMAIL=True
-      # - ANYMAIL_MAILGUN_API_KEY=MAILGUN-KEY
-      # - DJANGO_DEFAULT_FROM_EMAIL=example@example.com
+      - DJANGO_ALLOWED_HOSTS=localhost
+      - TAIGA_PUBLIC_REGISTER_ENABLED=false
+      - TAIGA_SSL=False
+      #- TAIGA_HOSTNAME=localhost
+      #- TAIGA_SKIP_DB_CHECK=True
+      #- TAIGA_DB_CHECK_LIMIT_RETRIES='5'
+      #- TAIGA_DB_CHECK_SLEEP_INTERVAL='5.5'
+
+      - USE_ANYMAIL=False
+      - ANYMAIL_MAILGUN_API_KEY=MAILGUN-KEY
+      - DJANGO_DEFAULT_FROM_EMAIL=example@example.com
+
     user: taiga
     entrypoint: ['/scripts/entrypoint.sh']
     # command: ['gunicorn', '--worker-class', 'gevent', '--workers', '10', '-b', '0.0.0.0:8000', 'taiga.wsgi']
     command: ['gunicorn', '-b', '0.0.0.0:8000', 'taiga.wsgi']
 
-  frontend:
-    build: frontend
-    env_file: [ .env ]
-    volumes_from:
-      - backend:ro
-    #environment:
-    # Must be in lowercase, because we are using in a json file (conf.json)
-    #   - TAIGA_DEBUG=true
-    #   - TAIGA_API_URL="http://example.com/api/v1/"
-    #   - TAIGA_EVENTS_URL="ws://example.com/events"
-    # Must be in lowercase, because we are using in a json file (conf.json)
-    #   - TAIGA_PUBLIC_REGISTER_ENABLED=false
-    #   - DEFAULT_LANGUAGE="en"
-    #  - GITLAB_URL=https://gitlab.com
-    #  - GITLAB_CLIENT_ID=CHANGE_ME
-    ports:
-      - "80:80"
-    depends_on:
-      # It would be better to add 'postgres' to 'depends_on' on 'backend' service
-      # but 'celeryworker' extends 'backend' and we cannot extend a service
-      # if it is using 'depends_on'.
-      - postgresql
-      - backend
-      - events
-
   celeryworker:
     extends: backend
     entrypoint: []
-    # command: ['celery', '-A', 'taiga', 'worker', '-c', '4', '--loglevel', 'info']
-    command: ['celery', '-A', 'taiga', 'worker', '-P', 'gevent', '-c', '4', '--loglevel', 'info']
+    command: ['celery', '-A', 'taiga', 'worker', '-P', 'gevent', '-c', '4', '--loglevel', 'debug']
     depends_on:
       - redis
       - rabbitmq
 
-  events:
-    build: events/
+  frontend:
+    #build: frontend
+    image: dougg/taiga-frontend
+    volumes_from:
+      - backend:ro
     environment:
-      # SAME AS DJANGO_SECRET_KEY
+       - TAIGA_DEBUG=true
+       - TAIGA_API_URL="http://localhost/api/v1/"
+       - TAIGA_EVENTS_URL="ws://localhost/events"
+       - TAIGA_PUBLIC_REGISTER_ENABLED=false
+       - DEFAULT_LANGUAGE="en"
+       - GITLAB_URL=https://gitlab.com
+       - GITLAB_CLIENT_ID=CHANGE_ME
+    ports:
+      - "80:80"
+    depends_on:
+      - postgresql
+      - backend
+      - events
+
+  events:
+    # build: events/
+    image: dougg/taiga-events
+    environment:
       - TAIGA_SECRET=DJANGO_SECRET_KEY
     depends_on:
       - rabbitmq

@@ -21,12 +21,7 @@ RUN rm ${TAIGA_VERSION}.tar.gz
 # Don't want pip to use git, so I'm replacing with pypi.
 RUN sed -i 's,git+https://github.com/Xof/django-pglocks.git,django-pglocks==1.0.2,g' requirements.txt
 
-# local.py and checkdb.py and celery
-# using gevent to run taiga gunicorn (workers)
-# using gevent on celery (workers)
-RUN echo "django-environ==0.4.0" >> requirements.txt
-RUN echo "gevent==1.1.2" >> requirements.txt
-RUN echo "django-anymail==0.5" >> requirements.txt
+COPY requirements.txt .
 
 RUN pip wheel --wheel-dir=./taiga_python_dependencies -r requirements.txt
 
@@ -34,7 +29,6 @@ RUN pip wheel --wheel-dir=./taiga_python_dependencies -r requirements.txt
 # FINAL IMAGE
 FROM python:3.6-alpine3.6
 
-LABEL maintainer="douglasmirandasilva@gmail.com"
 LABEL taiga_version="tag:3.1.3"
 
 WORKDIR /taiga_backend
