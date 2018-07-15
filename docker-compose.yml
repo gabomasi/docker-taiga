@@ -48,10 +48,10 @@ services:
       - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
       - GITLAB_SECRET=${GITLAB_SECRET}
 
-      - DJANGO_ALLOWED_HOSTS=localhost
+      - DJANGO_ALLOWED_HOSTS=${HOSTNAME}
       - TAIGA_PUBLIC_REGISTER_ENABLED=false
       - TAIGA_SSL=False
-      #- TAIGA_HOSTNAME=localhost
+      #- TAIGA_HOSTNAME=${HOSTNAME}
       #- TAIGA_SKIP_DB_CHECK=True
       #- TAIGA_DB_CHECK_LIMIT_RETRIES='5'
       #- TAIGA_DB_CHECK_SLEEP_INTERVAL='5.5'
@@ -80,8 +80,8 @@ services:
       - backend:ro
     environment:
        - TAIGA_DEBUG=true
-       - TAIGA_API_URL="http://localhost/api/v1/"
-       - TAIGA_EVENTS_URL="ws://localhost/events"
+       - TAIGA_API_URL="${WEB_PROTOCOL}://${HOSTNAME}/api/v1/"
+       - TAIGA_EVENTS_URL="${WEBSOCKET_PROTOCOL}://${HOSTNAME}/events"
        - TAIGA_PUBLIC_REGISTER_ENABLED=false
        - DEFAULT_LANGUAGE="en"
        - GITLAB_URL=${GITLAB_URL}
