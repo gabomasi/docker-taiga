@@ -17,7 +17,7 @@ DATABASES = {
         'NAME': env('DJANGO_DB_NAME'),
         'USER': env('DJANGO_DB_USER'),
         'PASSWORD': env('DJANGO_DB_PASSWORD'),
-        'HOST': 'postgresql',
+        'HOST': env('DJANGO_DB_HOST'),
         'PORT': '',
     }
 }

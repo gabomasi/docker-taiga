@@ -43,6 +43,7 @@ services:
       - DJANGO_DB_USER=taiga
       - DJANGO_DB_NAME=taiga
       - DJANGO_DB_PASSWORD=123
+      - DJANGO_DB_HOST=postgresql
 
       - USE_GITLAB=${USE_GITLAB}
       - GITLAB_URL=${GITLAB_URL}

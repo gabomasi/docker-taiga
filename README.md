@@ -37,7 +37,12 @@ try it, just type:
 docker-compose up
 ```
 
-PS: since the frontend port is mapped to 80, just go to your browser and http://localhost. The login credentials are **admin** with password **123123**.
+Since the frontend port is mapped to 80, just go to http://localhost
+
+The login credentials are:
+
+* username: **admin**
+* password: **123123**
 
 
 Credits
