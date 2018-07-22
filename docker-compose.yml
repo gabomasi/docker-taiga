@@ -62,6 +62,8 @@ services:
       - RABBITMQ_USER=taiga
       - RABBITMQ_PASS=taiga
 
+      - REDIS_HOST=redis
+
     user: taiga
     entrypoint: ['/scripts/entrypoint.sh']
     # command: ['gunicorn', '--worker-class', 'gevent', '--workers', '10', '-b', '0.0.0.0:8000', 'taiga.wsgi']
