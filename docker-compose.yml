@@ -58,6 +58,10 @@ services:
       - ANYMAIL_MAILGUN_API_KEY=MAILGUN-KEY
       - DJANGO_DEFAULT_FROM_EMAIL=example@example.com
 
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=taiga
+      - RABBITMQ_PASS=taiga
+
     user: taiga
     entrypoint: ['/scripts/entrypoint.sh']
     # command: ['gunicorn', '--worker-class', 'gevent', '--workers', '10', '-b', '0.0.0.0:8000', 'taiga.wsgi']
@@ -97,5 +101,9 @@ services:
     image: dougg/taiga-events
     environment:
       - TAIGA_SECRET=DJANGO_SECRET_KEY
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=taiga
+      - RABBITMQ_PASS=taiga
+
     depends_on:
       - rabbitmq
