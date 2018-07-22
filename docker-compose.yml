@@ -104,6 +104,5 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_USER=taiga
       - RABBITMQ_PASS=taiga
-
     depends_on:
       - rabbitmq

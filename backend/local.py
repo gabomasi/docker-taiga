@@ -18,7 +18,7 @@ DATABASES = {
         'USER': env('DJANGO_DB_USER'),
         'PASSWORD': env('DJANGO_DB_PASSWORD'),
         'HOST': env('DJANGO_DB_HOST'),
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
