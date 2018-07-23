@@ -11,8 +11,8 @@ env = environ.Env()
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 logging.info("Checking if table 'django_migrations' exists.")
 logging.info("If you want to skip this, just set the environment var")
-logging.info("TAIGA_SKIP_DB_CHECK=True on docker-compose.yml on <backend> service.")
-CONNECTION_STRING = f"dbname='{env('DJANGO_DB_NAME')}' user='{env('DJANGO_DB_USER')}' host='postgresql' password='{env('DJANGO_DB_PASSWORD')}'"
+logging.info("TAIGA_SKIP_DB_CHECK=True")
+CONNECTION_STRING = f"dbname='{env('DJANGO_DB_NAME')}' user='{env('DJANGO_DB_USER')}' host='{env('DJANGO_DB_HOST')}' password='{env('DJANGO_DB_PASSWORD')}'"
 LIMIT_RETRIES = env('TAIGA_DB_CHECK_LIMIT_RETRIES', cast=int, default=5)
 SLEEP_INTERVAL = env('TAIGA_DB_CHECK_SLEEP_INTERVAL', cast=float, default=5)
 
