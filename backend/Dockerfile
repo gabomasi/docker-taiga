@@ -1,9 +1,10 @@
 FROM python:3.6-alpine3.6 as BUILDER
 
-ENV TAIGA_VERSION 3.1.3
+ENV TAIGA_VERSION 3.4.1
 
 RUN apk update \
     && apk add --virtual build-dependencies \
+    git \
     # Essentials
     gcc musl-dev libressl-dev \
     # Postgres python client (psycopg2) build dependency
@@ -29,13 +30,14 @@ RUN pip wheel --wheel-dir=./taiga_python_dependencies -r requirements.txt
 # FINAL IMAGE
 FROM python:3.6-alpine3.6
 
-LABEL taiga_version="tag:3.1.3"
+LABEL taiga_version="tag:3.4.1"
 
 WORKDIR /taiga_backend
 
 COPY --from=BUILDER /taiga_backend ./
 
 RUN apk add --no-cache \
+    git \
     # Pillow / PIL
     freetype jpeg libwebp tiff libpng lcms2 openjpeg zlib libxslt libxml2 libffi \
     # Postgres python client

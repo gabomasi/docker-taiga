@@ -31,7 +31,8 @@ if [ ! -f /taiga_frontend/conf.json ]; then
       $GITLAB_PLUGIN
     ],
     "gitLabClientId": "$GITLAB_CLIENT_ID",
-    "gitLabUrl": "$GITLAB_URL"
+    "gitLabUrl": "$GITLAB_URL",
+    "gravatar": false
 }
 EOF
 fi

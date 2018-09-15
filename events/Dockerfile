@@ -1,4 +1,4 @@
-FROM node:8.9-alpine
+FROM node:8.12-alpine
 
 LABEL taiga_version="branch:master"
 ENV TAIGA_VERSION master

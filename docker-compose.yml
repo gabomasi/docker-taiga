@@ -20,7 +20,7 @@ services:
     image: redis:4.0-alpine
 
   rabbitmq:
-    image: rabbitmq:3.6-alpine
+    image: rabbitmq:3.7-alpine
     hostname: taiga_rabbitmq
     environment:
       # https://www.rabbitmq.com/clustering.html#erlang-cookie
@@ -32,8 +32,8 @@ services:
       # - RABBITMQ_HIPE_COMPILE=1
 
   backend:
-    # build: backend/
-    image: dougg/taiga-backend
+    build: backend/
+    # image: dougg/taiga-backend
     volumes:
       - taiga_backend_media:/taiga_backend/media
       - /taiga_backend/static-root
@@ -45,14 +45,15 @@ services:
       - DJANGO_DB_PASSWORD=123
       - DJANGO_DB_HOST=postgresql
 
-      - USE_GITLAB=${USE_GITLAB}
-      - GITLAB_URL=${GITLAB_URL}
-      - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
-      - GITLAB_SECRET=${GITLAB_SECRET}
+      # - USE_GITLAB=${USE_GITLAB}
+      # - GITLAB_URL=${GITLAB_URL}
+      # - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
+      # - GITLAB_SECRET=${GITLAB_SECRET}
 
       - DJANGO_ALLOWED_HOSTS=${HOSTNAME}
+      - TAIGA_HOSTNAME=${HOSTNAME}
       - TAIGA_PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED}
-      - TAIGA_SSL=false
+      - TAIGA_SSL=${SSL}
 
       - USE_ANYMAIL=false
       - ANYMAIL_MAILGUN_API_KEY=MAILGUN-KEY
@@ -78,19 +79,19 @@ services:
       - rabbitmq
 
   frontend:
-    # build: frontend
-    image: dougg/taiga-frontend
+    build: frontend
+    # image: dougg/taiga-frontend
     volumes_from:
       - backend:ro
     environment:
-       - TAIGA_DEBUG=true
+      #  - TAIGA_DEBUG=true
        - TAIGA_API_URL=${WEB_PROTOCOL}://${HOSTNAME}/api/v1/
        - TAIGA_EVENTS_URL=${WEBSOCKET_PROTOCOL}://${HOSTNAME}/events
        - TAIGA_PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED}
-       - DEFAULT_LANGUAGE=en
-       - USE_GITLAB=${USE_GITLAB}
-       - GITLAB_URL=${GITLAB_URL}
-       - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
+       - DEFAULT_LANGUAGE=zh-hans
+      #  - USE_GITLAB=${USE_GITLAB}
+      #  - GITLAB_URL=${GITLAB_URL}
+      #  - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
     ports:
       - "80:80"
     depends_on:
@@ -99,8 +100,8 @@ services:
       - events
 
   events:
-    # build: events/
-    image: dougg/taiga-events
+    build: events/
+    # image: dougg/taiga-events
     environment:
       - TAIGA_SECRET=DJANGO_SECRET_KEY
       - RABBITMQ_HOST=rabbitmq
