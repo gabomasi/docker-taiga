@@ -15,9 +15,11 @@ services:
       - POSTGRES_USER=taiga
       - POSTGRES_DB=taiga
       - POSTGRES_PASSWORD=123
+    restart: always
 
   redis:
     image: redis:4.0-alpine
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3.7-alpine
@@ -30,6 +32,7 @@ services:
       - RABBITMQ_DEFAULT_VHOST=taiga
       # http://www.rabbitmq.com/configure.html#config-items
       # - RABBITMQ_HIPE_COMPILE=1
+    restart: always
 
   backend:
     build: backend/
@@ -69,6 +72,7 @@ services:
     entrypoint: ['/scripts/entrypoint.sh']
     # command: ['gunicorn', '--worker-class', 'gevent', '--workers', '10', '-b', '0.0.0.0:8000', 'taiga.wsgi']
     command: ['gunicorn', '-b', '0.0.0.0:8000', 'taiga.wsgi']
+    restart: always
 
   celeryworker:
     extends: backend
@@ -77,6 +81,7 @@ services:
     depends_on:
       - redis
       - rabbitmq
+    restart: always
 
   frontend:
     build: frontend
@@ -93,11 +98,12 @@ services:
       #  - GITLAB_URL=${GITLAB_URL}
       #  - GITLAB_CLIENT_ID=${GITLAB_CLIENT_ID}
     ports:
-      - "80:80"
+      - "8887:80"
     depends_on:
       - postgresql
       - backend
       - events
+    restart: always
 
   events:
     build: events/
@@ -109,3 +115,4 @@ services:
       - RABBITMQ_PASS=taiga
     depends_on:
       - rabbitmq
+    restart: always
